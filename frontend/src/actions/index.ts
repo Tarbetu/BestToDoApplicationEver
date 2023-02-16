@@ -4,11 +4,11 @@ import { print } from "graphql";
 
 interface IResponse {
   name: String;
-  isDone: Boolean;
+  isDone: boolean;
 }
 
 export default class {
-  readonly Settings: {
+  private readonly Settings: {
     url: string;
     method: string;
     headers: { "content-type": string };
@@ -25,55 +25,57 @@ export default class {
   }
 
   async getTodo(name: String): Promise<IResponse> {
-    return await axios({
+    const response = await axios<IResponse>({
       data: {
         query: print(schemas.getTodoSchema),
         variables: { name },
       },
       ...this.Settings,
     });
+    return response.data;
   }
 
   async allTodos(): Promise<Array<IResponse>> {
-    return await axios({
+    const response = await axios({
       data: {
         query: print(schemas.allTodosSchema),
       },
       ...this.Settings,
     });
+    return response.data;
   }
 
   async createTodo(name: String, isDone: Boolean): Promise<IResponse> {
-    return await axios({
+    const response = await axios({
       data: {
         query: print(schemas.allTodosSchema),
         variables: { name, isDone },
       },
       ...this.Settings,
     });
+    return response.data;
   }
 
   async updateTodo(
-    name: String,
-    newName?: String,
-    isDone?: Boolean
-  ): Promise<IResponse> {
-    return await axios({
+{ name, newName, isDone }: { name: String; newName?: String; isDone?: Boolean; }  ): Promise<IResponse> {
+    const response = await axios({
       data: {
         query: print(schemas.allTodosSchema),
         variables: { name, isDone },
       },
       ...this.Settings,
     });
+    return response.data;
   }
 
   async destroyTodo(name: String): Promise<String> {
-    return await axios({
+    const response = await axios({
       data: {
         query: print(schemas.allTodosSchema),
         variables: { name },
       },
       ...this.Settings,
     });
+    return response.data;
   }
 }

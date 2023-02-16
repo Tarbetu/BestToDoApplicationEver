@@ -1,32 +1,40 @@
 import { reactive } from "vue";
 import Todo from "./todo";
+import actions from "@/actions";
+const Action = new actions();
 
 const state = reactive({
-  id: 0,
   todos: [] as Array<Todo>,
 });
 
-function findTodo(todoId: number): Todo | undefined {
-  return state.todos.find((todo) => todo.id == todoId);
+Action.allTodos().then((val) => {
+  const todos = val.map((todo) => new Todo(todo.name, todo.isDone));
+  state.todos = todos;
+});
+
+function findTodo(todoName: String): Todo | undefined {
+  return state.todos.find((todo: Todo) => todo.name == todoName);
 }
 
 function addTodo(todoName: string, isChecked: boolean) {
-  state.todos.push(new Todo(state.id++, todoName, isChecked));
+  const todo = new Todo(todoName, isChecked);
+  todo.submitOnDB;
+  state.todos.push(todo);
 }
 
-function editTodoName(todoId: number, newTodoName: string) {
-  const todo = findTodo(todoId);
+function editTodoName(name: String, newTodoName: string) {
+  const todo = findTodo(name);
   if (todo) {
     todo.setName(newTodoName);
   }
 }
 
-function toggleTodoStatus(id: number, isDone?: boolean) {
-  findTodo(id)?.setDone(isDone);
+function toggleTodoStatus(name: String, isDone?: boolean) {
+  findTodo(name)?.setDone(isDone);
 }
 
-function destroyTodo(todoId: number) {
-  const todo = findTodo(todoId);
+function destroyTodo(todoName: String) {
+  const todo = findTodo(todoName);
   todo?.destroy();
   state.todos = state.todos.filter((i) => todo != i);
 }

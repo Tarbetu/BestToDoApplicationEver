@@ -4,26 +4,28 @@ const Action = new actions();
 
 class Todo {
   constructor(
-    readonly id: number,
     public name: String,
     public isDone: boolean
-  ) {}
+  ) {
+  }
+
+  submitOnDB() {
+    Action.createTodo(this.name, this.isDone);
+  }
 
   setName(name: string) {
+    Action.updateTodo({ name: this.name, newName: name });
     this.name = name;
   }
 
   setDone(check?: boolean) {
-    if (check) {
-      this.isDone = check;
-    } else {
-      this.isDone = !this.isDone;
-    }
+    check = check || !this.isDone;
+    Action.updateTodo({ name: this.name, isDone: check });
+    this.isDone = check;
   }
 
   destroy() {
     Action.destroyTodo(this.name);
-    console.log("Şey :d");
   }
 }
 
