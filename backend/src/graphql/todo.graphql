@@ -1,0 +1,15 @@
+type Todo {
+  name: String!
+  isDone: Boolean!
+}
+
+input TodoInput {
+  name: String!
+  isDone: Boolean!
+}
+
+input TodoUpdate {
+  name: String!
+  newName: String
+  isDone: Boolean
+}

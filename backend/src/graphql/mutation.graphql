@@ -1,0 +1,5 @@
+type Mutation {
+  createTodo(input: TodoInput): Todo
+  updateTodo(input: TodoUpdate): Todo
+  destroyTodo(name: String!): String
+}
